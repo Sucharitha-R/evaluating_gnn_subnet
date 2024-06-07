@@ -85,6 +85,7 @@ class GNNSubNet(object):
         self.true_class = None
         self.gene_names = gene_names
         self.s2v_test_dataset = None
+        self.test_dataset = None
         self.edges =  np.transpose(np.array(dataset[0].edge_index))
 
         self.edge_mask = None
@@ -914,6 +915,7 @@ class GNNSubNet(object):
         print(f"Validation graph class 0: {test_graph_class_0_nr}, validation graph class 1: {test_graph_class_1_nr}")
 
         s2v_train_dataset = convert_to_s2vgraph(train_dataset_list)
+        self.test_dataset = test_dataset_list
         s2v_test_dataset  = convert_to_s2vgraph(test_dataset_list)
 
 
