@@ -1,164 +1,57 @@
-![GNNSubNetLogo](https://github.com/pievos101/GNN-SubNet/blob/main/GNNSubNet_plot.png)
+## Evaluating Explainability of Graph Neural Networks for Disease Subnetwork Detection
 
-# Disease subnetwork detection with explainable Graph Neural Networks
+This study was carried out as a final thesis project for the Bachelor Computer Science and Engineering, TU Delft.
+The paper can be found at: (Link TBD) <TBD>.
 
-## Paper 
+This repository extends GNN-SubNet and adds four explainability evaluation metrics:
+- RDT-fidelity (faithfulness)
+- Sparsity
+- Validity+
+- Validity-
 
-The paper for this project is available here: <https://academic.oup.com/bioinformatics/article/38/Supplement_2/ii120/6702000> 
+## GNN-SubNet
 
-A readthedocs documentation of GNN-SubNet is in progress and can be found here:
-<https://gnn-subnet.readthedocs.io>
+The paper describing the original GNN-SubNet project is available here: <https://academic.oup.com/bioinformatics/article/38/Supplement_2/ii120/6702000> 
 
-See also:
-https://github.com/pievos101/Ensemble-GNN/blob/main/README.md
-for disease module discovery using ensemble learning with Graph Neural Networks
+The code here builds upon the existing GitHub repository (containing both code and data) of GNN-SubNet: <https://github.com/pievos101/GNN-SubNet/tree/main>.
 
 ## Installation
 
-To install GNNSubNet run:
+First, set up a python environment and install the following packages:
 
 ```python
-pip install torch 
-pip install torch-geometric
-pip install torch-scatter
-pip install torch-sparse
+pip3 install torch torchvision torchaudio
+pip install torch-scatter -f https://data.pyg.org/whl/torch-2.3.0+cpu.html
+pip install torch-sparse -f https://data.pyg.org/whl/torch-2.3.0+cpu.html
+pip install torch_geometric -f https://data.pyg.org/whl/torch-2.3.0+cpu.html
+pip install pandas
+pip install python-igraph
+pip install dgl
+pip install matplotlib
 
 pip install GNNSubNet
-# newest version from GitHub can be installed via source
-pip install GNN-SubNet/
 ```
-Preferred versions are: torch==1.11.0, torchvision==0.12.0, torch-geometric==2.0.4, torch-scatter==2.0.9, and torch-sparse==0.6.13.
+
 ## Usage
 
-### Synthetic Barabasi Networks
+```explainability_evaluator.py``` implements four evaluation metrics: RDT-fidelity, validity+, validity- and sparsity. Check this file for detailed documentation on each of the methods.
 
-The datasets can be found here: 
-https://github.com/pievos101/GNN-SubNet/tree/main/GNNSubNet/datasets/synthetic
+The snippet below is intended to give an idea of how this evaluation is done. For a full working example, please refer to ```evaluation_experiments.ipynb```.
 
-```python
-from GNNSubNet import GNNSubNet as gnn
-
-# Synthetic data set  ------------------------- #
-loc   = "/home/bastian/GitHub/GNN-SubNet/GNNSubNet/datasets/synthetic"
-ppi   = f'{loc}/NETWORK_synthetic.txt'
-feats = [f'{loc}/FEATURES_synthetic.txt']
-targ  = f'{loc}/TARGET_synthetic.txt'
-
-# Read in the synthetic data
+```
 g = gnn.GNNSubNet(loc, ppi, feats, targ, normalize=False)
-
-# Get some general information about the data dimension
-g.summary()
-
-# Train the GNN classifier and validate performance on a test set
 g.train()
-
-# Check the performance of the classifier
-g.accuracy
-g.confusion_matrix
-
-# Run the Explainer with 4 iterations (10 is recommended)
-g.explain(3)
-
-# Edge and Node (Gene) Importances 
-g.gene_names
-g.edges
-
-# Importances
-g.edge_mask
-g.node_mask
-
-# Detected modules and their importances
-g.modules
-g.modules[0]
-
-g.module_importances
-
+g.explain(10) # 10 runs
+ev = eval.explainability_evaluator(g)
+ev.evaluate_RDT_fidelity(use_softmask=True, samples = samples)
+ev.evaluate_sparsity()
+ev.evaluate_validity(threshold=t, confusion_matrix=True)
 ```
 
-### TCGA multi-omics kidney cancer
-The datasets can be found here:
-https://github.com/pievos101/GNN-SubNet/tree/main/TCGA
+## Python notebooks
 
-```python
-from GNNSubNet import GNNSubNet as gnn
-
-# location of the files
-loc   = "/home/bastian/GitHub/GNN-SubNet/TCGA"
-# PPI network
-ppi   = f'{loc}/KIDNEY_RANDOM_PPI.txt'
-# single-omic features
-#feats = [f'{loc}/KIDNEY_RANDOM_Methy_FEATURES.txt']
-# multi-omic features
-feats = [f'{loc}/KIDNEY_RANDOM_mRNA_FEATURES.txt', f'{loc}/KIDNEY_RANDOM_Methy_FEATURES.txt']
-# outcome class
-targ  = f'{loc}/KIDNEY_RANDOM_TARGET.txt'
-
-# Load the multi-omics data 
-g = gnn.GNNSubNet(loc, ppi, feats, targ)
-
-# Train the GNN classifier and validate performance on a test set
-g.train()
-
-# Check the performance of the classifier
-g.accuracy
-g.confusion_matrix
-
-# Run the Explainer with 4 iterations (10 is recommended)
-g.explain(3)
-
-# Edge and Node (Gene) Importances 
-g.gene_names
-g.edges
-
-# Importances
-g.edge_mask
-g.node_mask
-
-# Detected modules and their importances
-g.modules
-g.modules[0]
-g.gene_names[g.modules[0]]
-
-g.module_importances
-
-```
-
-## Additional informations
-
-The GNNSubNet initialization function  expects the PPI network as an input, the feature matrices, as well as the outcome class. The input needs to be adjusted by the user.
-
-The PPI network consists of three columns.
-The first two columns reflect the edges between the nodes (gene names), the third column is the confidence score of the specified edge. The range of this score is [0,999], where high scores mean high confidence.
-
-The rows of the feature matrices (e.g mRNA, and DNA Methylation) reflect the patients, whereas the columns represent the features (genes). Row names as well as column names are required!
-
-Please see the folder "datasets/TCGA" for some sample/example files.
-
-The mentioned workflow performs GNN classification, explanations, and community detection for disease subnetwork discovery. 
-
-After exectution, importance scores are stored in the 'edge_mask.txt' file of the data folder. 
-
-The detected disease subnetworks can be found within the 'communities.txt' file, and the corresponding scores within the 'communities_scores.txt' file.
-
-Note, the mentioned community file contain the network node identifier which match the order of the gene names stored in 'gene_names.txt'
-
-
-## Citation
-https://academic.oup.com/bioinformatics/article/38/Supplement_2/ii120/6702000
-
-### Bibtex
-```
-@article{pfeifer2022gnn,
-  title={{GNN-SubNet}: Disease subnetwork detection with explainable graph neural networks},
-  author={Pfeifer, Bastian and Saranti, Anna and Holzinger, Andreas},
-  journal={Bioinformatics},
-  volume={38},
-  number={Supplement\_2},
-  pages={ii120--ii126},
-  year={2022},
-  publisher={Oxford University Press}
-}
-
-```
+Three notebooks can be found in this repository:
+- ```evaluation_experiments.ipynb``` : a full working example, demonstrating how to train, explain and evaluate the explanations using the four explainability metrics.
+- ```visualisation_and_analyis.ipynb```: intended as a follow-up to the first notebook, this takes the results of the experiments and creates processed tables and plots. These were used to generate the tables and plots presented in the paper.
+- ```extended_experiments.ipynb```: an additional experiment that looks into the size of the disease subnetworks found after training and explaining the GNN.
   

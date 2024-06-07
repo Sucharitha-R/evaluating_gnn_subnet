@@ -339,7 +339,7 @@ def load_OMICS_dataset_old(edge_path="", feat_paths=[], survival_path="", subgra
         
         drop_nodes = [col_pairs_for_iso[x] for x in nodes]
         for feat in feats:
-            feat.drop(feat.columns.difference(drop_nodes), 1, inplace=True)
+            feat.drop(feat.columns.difference(drop_nodes), axis=1, inplace=True)
 
         new_nodes = list(range(len(nodes)))
         new_nodes_dict = {old: new for old,new in zip(nodes, new_nodes)}
@@ -533,7 +533,7 @@ def load_OMICS_dataset(edge_path="", feat_paths=[], survival_path="", connected=
         
         drop_nodes = [col_pairs_for_iso[x] for x in nodes]
         for feat in feats:
-            feat.drop(feat.columns.difference(drop_nodes), 1, inplace=True)
+            feat.drop(feat.columns.difference(drop_nodes), axis=1, inplace=True)
 
         new_nodes = list(range(len(nodes)))
         new_nodes_dict = {old: new for old,new in zip(nodes, new_nodes)}
@@ -564,6 +564,8 @@ def load_OMICS_dataset(edge_path="", feat_paths=[], survival_path="", connected=
 
     survival = pd.read_csv(survival_path, delimiter=' ')
     survival_values = survival.to_numpy()
+
+    x=torch.tensor(temp[0])
 
     for idx in range(temp.shape[0]):
         graphs.append(Data(x=torch.tensor(temp[idx]).float(),
