@@ -3,11 +3,13 @@
 This study was carried out as a final thesis project for the Bachelor Computer Science and Engineering, TU Delft.
 The paper can be found at: (Link TBD) <TBD>.
 
-This repository extends GNN-SubNet and adds four explainability evaluation metrics:
+This repository extends GNN-SubNet [1] and adds four explainability evaluation metrics:
 - RDT-fidelity (faithfulness)
 - Sparsity
 - Validity+
 - Validity-
+
+RDT-fidelity and Sparsity are metrics defined by the BAGEL benchmark [2], while validity+ and validity- are newly defined by this study taking inspiration from [3] and [4].
 
 ## GNN-SubNet
 
@@ -48,10 +50,27 @@ ev.evaluate_sparsity()
 ev.evaluate_validity(threshold=t, confusion_matrix=True)
 ```
 
-## Python notebooks
+## Jupyter notebooks
 
 Three notebooks can be found in this repository:
 - ```evaluation_experiments.ipynb``` : a full working example, demonstrating how to train, explain and evaluate the explanations using the four explainability metrics.
 - ```visualisation_and_analyis.ipynb```: intended as a follow-up to the first notebook, this takes the results of the experiments and creates processed tables and plots. These were used to generate the tables and plots presented in the paper.
 - ```extended_experiments.ipynb```: an additional experiment that looks into the size of the disease subnetworks found after training and explaining the GNN.
   
+## References
+[1] B. Pfeifer, A. Secic, A. Saranti, and A. Holzinger, “Gnn-
+subnet: Disease subnetwork detection with explainable
+graph neural networks,” Jan. 2022. DOI: [10.1101/2022.
+01.12.475995.](https://academic.oup.com/bioinformatics/article/38/Supplement_2/ii120/6702000)
+
+[2] M. Rathee, T. Funke, A. Anand, and M. Khosla, “Bagel:
+A benchmark for assessing graph neural network expla-
+nations,” arXiv preprint [arXiv:2206.13983, 2022.](https://arxiv.org/abs/2206.13983)
+
+[3] H. Yuan, H. Yu, S. Gui, and S. Ji, Explainability in
+graph neural networks: A taxonomic survey, 2022.
+[arXiv: 2012.15445 [cs.LG].](https://arxiv.org/abs/2012.15445)
+
+[4] T. Funke, M. Khosla, M. Rathee, and A. Anand, Zorro:
+Valid, sparse, and stable explanations in graph neural
+networks, 2022. [arXiv: 2105.08621 [cs.LG].](https://arxiv.org/abs/2105.08621)
