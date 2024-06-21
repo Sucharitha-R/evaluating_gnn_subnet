@@ -1,7 +1,8 @@
-## Evaluating Explainability of Graph Neural Networks for Disease Subnetwork Detection
+## Evaluating the Explainability of Graph Neural Networks for Disease Subnetwork Detection
 
-This study was carried out as a final thesis project for the Bachelor Computer Science and Engineering, TU Delft.
-The paper can be found at: (Link TBD) <TBD>.
+This study was carried out as a final thesis project for the Bachelor Computer Science and Engineering, TU Delft. 
+
+The full paper is available [here](http://resolver.tudelft.nl/uuid:6b1f4281-3b9f-44b1-8cf0-61d0a4706635).
 
 This repository extends GNN-SubNet [1] and adds four explainability evaluation metrics:
 - RDT-fidelity (faithfulness)
@@ -54,7 +55,7 @@ ev.evaluate_validity(threshold=t, confusion_matrix=True)
 
 Three notebooks can be found in this repository:
 - ```evaluation_experiments.ipynb``` : a full working example, demonstrating how to train, explain and evaluate the explanations using the four explainability metrics.
-- ```visualisation_and_analyis.ipynb```: intended as a follow-up to the first notebook, this takes the results of the experiments and creates processed tables and plots. These were used to generate the tables and plots presented in the paper.
+- ```visualisation_and_analyis.ipynb```: intended as a follow-up to the first notebook, this takes the results of the experiments and creates processed tables and plots. These were used to generate the tables and plots presented in the [paper](http://resolver.tudelft.nl/uuid:6b1f4281-3b9f-44b1-8cf0-61d0a4706635).
 - ```extended_experiments.ipynb```: an additional experiment that looks into the size of the disease subnetworks found after training and explaining the GNN.
   
 ## References
