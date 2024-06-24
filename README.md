@@ -1,6 +1,6 @@
 ## Evaluating the Explainability of Graph Neural Networks for Disease Subnetwork Detection
 
-This study was carried out as a final thesis project for the Bachelor Computer Science and Engineering, TU Delft. 
+This study was carried out for the final course [CSE3000](https://github.com/TU-Delft-CSE/Research-Project) of the Bachelor Computer Science and Engineering, TU Delft.
 
 The full paper is available [here](http://resolver.tudelft.nl/uuid:6b1f4281-3b9f-44b1-8cf0-61d0a4706635).
 
